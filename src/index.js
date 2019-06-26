@@ -21,8 +21,9 @@ const SUCCEEDED = "SUCCEEDED";
 const FAILED = "FAILED";
 
 // Commands
+const RUN = "RUN";
 const START_TIMER = "START_TIMER";
-export const commands = [COMMAND_RENDER, START_TIMER];
+export const commands = [COMMAND_RENDER, RUN, START_TIMER];
 
 // State update
 // Basically {a, b: {c, d}}, [{b:{e}]} -> {a, b:{e}}
@@ -46,7 +47,7 @@ const states = {
 const initialControlState = INIT;
 const initialExtendedState = {};
 const transitions = [
-  { from: INIT, event: START, to: SUSPENSE, action: ACTION_IDENTITY },
+  { from: INIT, event: START, to: SUSPENSE, action: runOperation },
   { from: SUSPENSE, event: INIT_EVENT, to: PENDING, action: startTimer },
   { from: PENDING, event: TIMER_EXPIRED, to: SPINNING, action: renderFallback },
   { from: SUSPENSE, event: SUCCEEDED, to: DONE, action: renderSucceeded },
@@ -54,6 +55,17 @@ const transitions = [
 ];
 
 // Actions
+function runOperation(extendedState, eventData, settings) {
+  const { run } = settings;
+  return {
+    updates: [],
+    outputs: [{
+      command: RUN,
+      params: run
+    }],
+  }
+}
+
 function startTimer(extendedState, eventData, settings) {
   return {
     updates: [],
