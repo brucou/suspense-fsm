@@ -1,0 +1,62 @@
+{
+  "name": "suspense-fsm",
+  "sideEffects": false,
+  "version": "0.1.0",
+  "description": "Finite State Machine simulating React Suspense",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/brucou/suspense-fsm"
+  },
+  "keywords": [
+    "state-machine",
+    "state machine",
+    "finite state machine",
+    "state-transducer",
+    "state transducer",
+    "automata",
+    "automaton",
+    "automata",
+    "svelte"
+  ],
+  "module": "dist/suspense-fsm.es.min.js",
+  "main": "dist/suspense-fsm.umd.min.js",
+  "files": [
+    "dist/"
+  ],
+  "np": {
+    "yarn": false,
+    "contents": "dist"
+  },
+  "scripts": {
+    "prepublish": "npm run build",
+    "build_dev": "rollup --sourcemap -c rollup.config.js --environment BUILD:development",
+    "build_prod": "rollup --sourcemap -c rollup.config.js --environment BUILD:production",
+    "build": "npm run build_dev &&  npm run build_prod"
+  },
+  "engines": {
+    "node": "6.3.0"
+  },
+  "author": "brucou",
+  "license": "MIT",
+  "devDependencies": {
+    "@babel/cli": "^7.4.4",
+    "@babel/core": "^7.4.5",
+    "@babel/preset-env": "^7.4.5",
+    "babel-preset-es2015-rollup": "^3.0.0",
+    "rollup": "^0.63.4",
+    "rollup-plugin-babel": "^4.3.2",
+    "rollup-plugin-commonjs": "^9.1.3",
+    "rollup-plugin-node-builtins": "^2.1.2",
+    "rollup-plugin-node-resolve": "^3.3.0",
+    "rollup-plugin-terser": "^1.0.1",
+    "rollup-plugin-uglify": "^4.0.0"
+  },
+  "dependencies": {
+    "kingly": "^0.19.3"
+  },
+  "browserslist": [
+    "> 1%",
+    "last 2 versions",
+    "not ie <= 9"
+  ]
+}
