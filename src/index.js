@@ -4,6 +4,7 @@ import { INIT_EVENT, ACTION_IDENTITY, COMMAND_RENDER } from "kingly"
 const FALLBACK = "FALLBACK";
 const MAIN = "MAIN";
 const ERR = "ERR";
+export const properties = [FALLBACK, MAIN, ERR];
 
 // Define the state machine
 // State monikers
