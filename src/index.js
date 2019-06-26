@@ -1,4 +1,4 @@
-import { INIT_EVENT, ACTION_IDENTITY, COMMAND_RENDER } from "kingly"
+import { COMMAND_RENDER, INIT_EVENT } from "kingly"
 
 // Define properties
 const FALLBACK = "FALLBACK";
@@ -68,11 +68,13 @@ function runOperation(extendedState, eventData, settings) {
 }
 
 function startTimer(extendedState, eventData, settings) {
+  const { duration } = settings;
+
   return {
     updates: [],
     outputs: [{
       command: START_TIMER,
-      params: 160 // ms
+      params: duration || 160
     }],
   }
 }
@@ -82,7 +84,7 @@ function renderFallback(extendedState, eventData, settings) {
     updates: [],
     outputs: [{
       command: COMMAND_RENDER,
-      params: FALLBACK
+      params: { display: FALLBACK }
     }],
   }
 }
@@ -92,7 +94,7 @@ function renderSucceeded(extendedState, eventData, settings) {
     updates: [],
     outputs: [{
       command: COMMAND_RENDER,
-      params: MAIN
+      params: { display: MAIN, data: eventData }
     }],
   }
 }
@@ -102,7 +104,7 @@ function renderError(extendedState, eventData, settings) {
     updates: [],
     outputs: [{
       command: COMMAND_RENDER,
-      params: ERR
+      params: { display: ERROR }
     }],
   }
 }
