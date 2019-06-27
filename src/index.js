@@ -58,13 +58,16 @@ const transitions = [
 // Actions
 function runOperation(extendedState, eventData, settings) {
   const { run } = settings;
-  return {
+
+  return run
+    ? {
     updates: [],
     outputs: [{
       command: RUN,
       params: run
     }],
   }
+  : {updates: [], outputs: []}
 }
 
 function startTimer(extendedState, eventData, settings) {
