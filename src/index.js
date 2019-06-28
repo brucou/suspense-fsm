@@ -1,4 +1,4 @@
-import { COMMAND_RENDER, INIT_EVENT } from "kingly"
+import { COMMAND_RENDER, INIT_EVENT, createStateMachine } from "kingly"
 
 // Define properties
 const FALLBACK = "FALLBACK";
@@ -120,3 +120,7 @@ export const fsmDef = {
   transitions,
   updateState
 };
+
+export const factory = function fsmFactory(settings){
+  return createStateMachine(fsmDef, settings)
+}
