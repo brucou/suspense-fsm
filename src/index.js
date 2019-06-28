@@ -77,7 +77,7 @@ function startTimer(extendedState, eventData, settings) {
     updates: [],
     outputs: [{
       command: START_TIMER,
-      params: duration || 160
+      params: duration || 200
     }],
   }
 }
