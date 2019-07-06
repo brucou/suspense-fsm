@@ -61,13 +61,13 @@ function runOperation(extendedState, eventData, settings) {
 
   return task
     ? {
-    updates: [],
-    outputs: [{
-      command: RUN,
-      params: task
-    }],
-  }
-  : {updates: [], outputs: []}
+      updates: [],
+      outputs: [{
+        command: RUN,
+        params: task
+      }],
+    }
+    : {updates: [], outputs: []}
 }
 
 function startTimer(extendedState, eventData, settings) {
@@ -121,7 +121,8 @@ export const fsmDef = {
   updateState
 };
 
-export const factory = function fsmFactory(settings){
+export function factory(settings){
   return createStateMachine(fsmDef, settings)
 }
+
 
