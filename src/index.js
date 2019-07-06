@@ -57,27 +57,27 @@ const transitions = [
 
 // Actions
 function runOperation(extendedState, eventData, settings) {
-  const { run } = settings;
+  const { task } = settings;
 
-  return run
+  return task
     ? {
     updates: [],
     outputs: [{
       command: RUN,
-      params: run
+      params: task
     }],
   }
   : {updates: [], outputs: []}
 }
 
 function startTimer(extendedState, eventData, settings) {
-  const { duration } = settings;
+  const { timeout} = settings;
 
   return {
     updates: [],
     outputs: [{
       command: START_TIMER,
-      params: duration || 200
+      params: timeout || 200
     }],
   }
 }
@@ -124,3 +124,4 @@ export const fsmDef = {
 export const factory = function fsmFactory(settings){
   return createStateMachine(fsmDef, settings)
 }
+
