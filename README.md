@@ -16,9 +16,31 @@
 We will mix control and data flow in our test sequences.
 
 ### Oracle
-- we know in advance what 
+1. Start -> Spinning -> Ready
+   - No run:
+     - emit timer | render fallback | render main
+   - run:
+     - run task | emit timer | render fallback | render main
+2. Start -> Spinning -> Error
+   - No run:
+     - emit timer | render fallback | render error
+   - run:
+     - run task | emit timer | render fallback | render error
+3. Start -> Ready
+   - No run:
+     - emit timer | render main
+   - run:
+     - run task | emit timer | render main
+4. Start -> Error
+   - No run:
+     - emit timer | render main
+   - run:
+     - run task | emit timer | render main
 
 ### Properties
-- Any sequence of commands starting with Start is non-empty and has a START_TIMER command in the outputs
-- Any sequence of commands with a run operation has outputs starting with the run command 
-1. Commands: []
+Abstracting null commands:
+- emit timer is always there
+- run task command is always before emit timer when present
+- render main is last when present
+- render error is last when present 
+- the render fallback command when present is always immediately after emit timer 

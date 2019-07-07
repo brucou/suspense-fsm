@@ -107,7 +107,7 @@ function renderError(extendedState, eventData, settings) {
     updates: [],
     outputs: [{
       command: COMMAND_RENDER,
-      params: { display: ERROR, data: eventData }
+      params: { display: ERR, data: eventData }
     }],
   }
 }
