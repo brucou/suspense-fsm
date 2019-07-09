@@ -1,4 +1,5 @@
 import { mapOverObj } from "fp-rosetree"
+import prettyFormat from 'pretty-format';
 
 function isFunction(obj) {
   return typeof obj === 'function'
@@ -15,6 +16,9 @@ function isPOJO(obj) {
 }
 
 export function formatResult(result) {
+  if (Array.isArray(result)) {
+    return result.map(formatResult)
+  }
   if (!isPOJO(result)) {
     return result
   }
@@ -29,4 +33,32 @@ export function formatResult(result) {
       },
       result)
   }
+}
+
+export function getRandomArbitrary(min, max) {
+  return Math.random() * (max - min) + min;
+}
+
+export function multiplySequences(arrInputs) {
+  if (arrInputs.length === 0) return []
+
+  return arrInputs.reduce((acc, arrInput) => {
+    return [].concat(acc.map(inputSeq => arrInput.map(lastInput => ([].concat(inputSeq).concat([lastInput]))))).flat()
+  }, [[]])
+}
+
+function formatValue(obj) {
+  const formattedString = prettyFormat(obj)
+  return formattedString.length > 10
+    ? prettyFormat(obj).substr(0, 10) + "..."
+    : formattedString
+}
+
+export function formatInputSeq(inputSeq) {
+  return inputSeq.map(input => {
+    if (isPOJO(input)) {
+      return `${Object.keys(input)[0]}: ${formatValue(Object.values(input)[0])}`
+    }
+    else return JSON.stringify(input)
+  }).join(' --> ')
 }

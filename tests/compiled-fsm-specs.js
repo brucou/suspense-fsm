@@ -1,9 +1,9 @@
 import * as QUnit from "qunitjs"
 import { compiledFactory, START } from "../src/compiled-fsm"
 import { formatResult } from "./helpers"
+import { defaultTimeout } from "../src"
 
 const dummyTask = function dummyTask (){}
-const defaultTimeout = 200;
 
 const noSettings = {};
 const durationSettings = {timeout: 100};

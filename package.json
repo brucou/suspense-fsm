@@ -44,8 +44,10 @@
     "@babel/core": "^7.4.5",
     "@babel/preset-env": "^7.4.5",
     "babel-preset-es2015-rollup": "^3.0.0",
+    "fp-rosetree": "^0.7.0",
     "parcel": "^1.12.3",
     "parcel-bundler": "^1.12.3",
+    "pretty-format": "^24.8.0",
     "qunitjs": "^1.20.0",
     "rollup": "^0.63.4",
     "rollup-plugin-babel": "^4.3.2",
@@ -54,7 +56,8 @@
     "rollup-plugin-node-resolve": "^3.3.0",
     "rollup-plugin-terser": "^1.0.1",
     "rollup-plugin-uglify": "^4.0.0",
-    "fp-rosetree": "^0.7.0"
+    "state-transducer-testing": "^0.11.0",
+    "graph-adt": "^0.8.2"
   },
   "dependencies": {
     "kingly": "^0.20.0"

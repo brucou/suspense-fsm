@@ -1,30 +1,10 @@
-import { COMMAND_RENDER, createStateMachine, INIT_EVENT, destructureEvent, NO_OUTPUT } from "kingly"
+import { createStateMachine, INIT_EVENT, destructureEvent, NO_OUTPUT } from "kingly"
+import { commandMonikers, defaultTimeout, eventMonikers, properties, stateMonikers } from "../src/properties"
 
-// Define properties
-const FALLBACK = "FALLBACK";
-const MAIN = "MAIN";
-const ERR = "ERR";
-export const properties = [FALLBACK, MAIN, ERR];
-
-// Define the state machine
-// State monikers
-const INIT = "OFF";
-const SUSPENSE = "SUSPENSE";
-const PENDING = "PENDING";
-const SPINNING = "SPINNING";
-const ERROR = "ERROR";
-const DONE = "DONE";
-
-// Event monikers
-const START = "START";
-const TIMER_EXPIRED = "TIMER_EXPIRED";
-const SUCCEEDED = "SUCCEEDED";
-const FAILED = "FAILED";
-
-// Commands
-const RUN = "RUN";
-const START_TIMER = "START_TIMER";
-export const commands = [COMMAND_RENDER, RUN, START_TIMER];
+const [FALLBACK, MAIN, ERR] = properties;
+const [INIT, SUSPENSE, PENDING, SPINNING, ERROR, DONE] = stateMonikers;
+const [START, TIMER_EXPIRED, SUCCEEDED, FAILED] = eventMonikers;
+const [COMMAND_RENDER, RUN, START_TIMER] = commandMonikers;
 
 // State update
 // Basically {a, b: {c, d}}, [{b:{e}]} -> {a, b:{e}}
@@ -77,7 +57,7 @@ function startTimer(extendedState, eventData, settings) {
     updates: [],
     outputs: [{
       command: START_TIMER,
-      params: timeout || 200
+      params: timeout || defaultTimeout
     }],
   }
 }

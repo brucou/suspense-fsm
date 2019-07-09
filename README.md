@@ -44,3 +44,8 @@ Abstracting null commands:
 - render main is last when present
 - render error is last when present 
 - the render fallback command when present is always immediately after emit timer 
+
+## Edge cases
+Basically not starting with start, receiving unexpected events etc.
+- make some myself: take the oracle and intersperse event there, I know where the null will be from the oracle
+- make some random one
