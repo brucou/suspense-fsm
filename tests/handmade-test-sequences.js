@@ -1,4 +1,3 @@
-import { FAILED, START, SUCCEEDED, TIMER_EXPIRED } from "../src"
 import {  multiplySequences } from "./helpers"
 import { EV_START, EV_TIMER_EXPIRED, EV_ERROR, EV_SUCCEEDED } from "./properties"
 

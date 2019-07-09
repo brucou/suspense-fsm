@@ -1,4 +1,6 @@
-import { FAILED, START, SUCCEEDED, TIMER_EXPIRED } from "../src"
+import { eventMonikers } from "../src/properties"
+
+const [START, TIMER_EXPIRED, SUCCEEDED, FAILED] = eventMonikers;
 
 export const EV_START = {[START]: void 0};
 

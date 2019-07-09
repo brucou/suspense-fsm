@@ -1,7 +1,9 @@
 import * as QUnit from "qunitjs"
-import { compiledFactory, START } from "../src/compiled-fsm"
+import { compiledFactory } from "../src/compiled-fsm"
 import { formatResult } from "./helpers"
-import { defaultTimeout } from "../src/properties"
+import { defaultTimeout, eventMonikers, stateMonikers } from "../src/properties"
+
+const [START, TIMER_EXPIRED, SUCCEEDED, FAILED] = eventMonikers;
 
 const dummyTask = function dummyTask (){}
 

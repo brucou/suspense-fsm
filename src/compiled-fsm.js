@@ -1,30 +1,10 @@
-import { COMMAND_RENDER, destructureEvent, INIT_EVENT, NO_OUTPUT } from "kingly"
+import { destructureEvent, INIT_EVENT, NO_OUTPUT } from "kingly"
+import { commandMonikers, eventMonikers, stateMonikers, properties } from "./properties"
 
-// Define properties
-const FALLBACK = "FALLBACK";
-const MAIN = "MAIN";
-const ERR = "ERR";
-export const properties = [FALLBACK, MAIN, ERR];
-
-// Define the state machine
-// State monikers
-const INIT = "OFF";
-const SUSPENSE = "SUSPENSE";
-const PENDING = "PENDING";
-const SPINNING = "SPINNING";
-const ERROR = "ERROR";
-const DONE = "DONE";
-
-// Event monikers
-export const START = "START";
-export const TIMER_EXPIRED = "TIMER_EXPIRED";
-export const SUCCEEDED = "SUCCEEDED";
-export const FAILED = "FAILED";
-
-// Commands
-const RUN = "RUN";
-const START_TIMER = "START_TIMER";
-export const commands = [COMMAND_RENDER, RUN, START_TIMER];
+const [FALLBACK, MAIN, ERR] = properties;
+const [INIT, SUSPENSE, PENDING, SPINNING, ERROR, DONE] = stateMonikers;
+const [START, TIMER_EXPIRED, SUCCEEDED, FAILED] = eventMonikers;
+const [COMMAND_RENDER, RUN, START_TIMER] = commandMonikers;
 
 // Actions
 function runOperation(extendedState, eventData, settings) {
@@ -49,6 +29,36 @@ function startTimer(extendedState, eventData, settings) {
     outputs: [{
       command: START_TIMER,
       params: timeout || 200
+    }],
+  }
+}
+
+function renderSucceeded(extendedState, eventData, settings) {
+  return {
+    updates: [],
+    outputs: [{
+      command: COMMAND_RENDER,
+      params: { display: MAIN, data: eventData }
+    }],
+  }
+}
+
+function renderError(extendedState, eventData, settings) {
+  return {
+    updates: [],
+    outputs: [{
+      command: COMMAND_RENDER,
+      params: { display: ERR, data: eventData }
+    }],
+  }
+}
+
+function renderFallback(extendedState, eventData, settings) {
+  return {
+    updates: [],
+    outputs: [{
+      command: COMMAND_RENDER,
+      params: { display: FALLBACK }
     }],
   }
 }
@@ -97,27 +107,27 @@ function getAutomaticEvent(controlState, eventData) {
   }
 }
 
+const eventHandlers = {
+  [INIT]: {
+    [START]: handleStartInInitState
+  },
+  [SUSPENSE]: {
+    [INIT_EVENT]: handleInitInSuspenseState,
+    [SUCCEEDED]: handleSucceededInSuspenseState,
+    [FAILED]: handleFailedInSuspenseState
+  },
+  [PENDING]: {
+    [TIMER_EXPIRED]: handleTimerExpiredInPendingState,
+  },
+  [SPINNING]: {},
+  [ERROR]: {},
+  [DONE]: {}
+};
+
 export function compiledFactory(settings) {
   let controlState = initialControlState;
   let extendedState = initialExtendedState;
   let historyState = null;
-
-  const eventHandlers = {
-    [INIT]: {
-      [START]: handleStartInInitState
-    },
-    [SUSPENSE]: {
-      [INIT_EVENT]: handleInitInSuspenseState,
-      [SUCCEEDED]: handleSucceededInSuspenseState,
-      [FAILED]: handleFailedInSuspenseState
-    },
-    [PENDING]: {
-      [TIMER_EXPIRED]: handleTimerExpiredInPendingState,
-    },
-    [SPINNING]: {},
-    [ERROR]: {},
-    [DONE]: {}
-  };
 
   // TODO: haven't dealt with history states yet!! That should be done in the event handler?
   return function suspenseFsm(event) {
@@ -216,11 +226,58 @@ function handleInitInSuspenseState(machineState, eventData, settings) {
   }
 }
 
-function handleTimerExpiredInPendingState(machineState, eventData, settings) {}
+function handleTimerExpiredInPendingState(machineState, eventData, settings) {
+  const { controlState, extendedState, historyState } = machineState;
+  const { updates, outputs } = renderFallback(extendedState, eventData, settings);
+  const updatedHistoryState = historyState;
 
-function handleSucceededInSuspenseState(machineState, eventData, settings) {}
+  const updatedMachineState = {
+    updatedControlState: SPINNING,
+    updatedExtendedState: updateState(extendedState, updates),
+    updatedHistoryState
+  }
 
-function handleFailedInSuspenseState(machineState, eventData, settings) {}
+  return {
+    updatedMachineState,
+    outputs
+  }
+}
+
+function handleSucceededInSuspenseState(machineState, eventData, settings) {
+  const { controlState, extendedState, historyState } = machineState;
+  const { updates, outputs } = renderSucceeded(extendedState, eventData, settings);
+  // TODO : I should update the history state her but won't cause no history states defined for this compound state!
+  const updatedHistoryState = historyState;
+
+  const updatedMachineState = {
+    updatedControlState: DONE,
+    updatedExtendedState: updateState(extendedState, updates),
+    updatedHistoryState
+  }
+
+  return {
+    updatedMachineState,
+    outputs
+  }
+}
+
+function handleFailedInSuspenseState(machineState, eventData, settings) {
+  const { controlState, extendedState, historyState } = machineState;
+  const { updates, outputs } = renderError(extendedState, eventData, settings);
+  // TODO : I should update the history state her but won't cause no history states defined for this compound state!
+  const updatedHistoryState = historyState;
+
+  const updatedMachineState = {
+    updatedControlState: ERROR,
+    updatedExtendedState: updateState(extendedState, updates),
+    updatedHistoryState
+  }
+
+  return {
+    updatedMachineState,
+    outputs
+  }
+}
 
 // const transitions = [
 //   { from: INIT, event: START, to: SUSPENSE, action: runOperation },

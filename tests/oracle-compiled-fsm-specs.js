@@ -1,24 +1,19 @@
 import * as QUnit from "qunitjs"
-import { factory } from "../src/"
-import { commandMonikers, defaultTimeout, eventMonikers, stateMonikers, properties } from "../src/properties"
+import { compiledFactory } from "../src/compiled-fsm"
+import { defaultTimeout } from "../src/properties"
 import {
   START_ERROR_SCENARIOS, START_READY_SCENARIOS, START_SPINNING_ERROR_SCENARIOS, START_SPINNING_READY_SCENARIOS
 } from "./handmade-test-sequences"
 import { formatInputSeq, formatResult, getRandomArbitrary } from "./helpers"
 
-const [FALLBACK, MAIN, ERR] = properties;
-const [INIT, SUSPENSE, PENDING, SPINNING, ERROR, DONE] = stateMonikers;
-const [START, TIMER_EXPIRED, SUCCEEDED, FAILED] = eventMonikers;
-const [COMMAND_RENDER, RUN, START_TIMER] = commandMonikers;
-
-QUnit.module("Testing fsm with oracle - START_SPINNING_READY scenarios", {});
+QUnit.module("Testing compiled fsm with oracle - START_SPINNING_READY scenarios", {});
 
 const dummyTask = function dummyTask() {}
 const timeout = Math.floor(getRandomArbitrary(0, 500));
 
 START_SPINNING_READY_SCENARIOS.forEach(inputSeq => {
   QUnit.test(`With task and timeout: ${formatInputSeq(inputSeq)}`, function exec_test(assert) {
-    const fsm = factory({ task: dummyTask, timeout });
+    const fsm = compiledFactory({ task: dummyTask, timeout });
     const data = Object.values(inputSeq[2])[0];
 
     const outputSeq = inputSeq.map(fsm);
@@ -43,7 +38,7 @@ START_SPINNING_READY_SCENARIOS.forEach(inputSeq => {
 
 START_SPINNING_READY_SCENARIOS.forEach(inputSeq => {
   QUnit.test(`With task and no timeout: ${formatInputSeq(inputSeq)}`, function exec_test(assert) {
-    const fsm = factory({ task: dummyTask });
+    const fsm = compiledFactory({ task: dummyTask });
     const data = Object.values(inputSeq[2])[0];
 
     const outputSeq = inputSeq.map(fsm);
@@ -68,7 +63,7 @@ START_SPINNING_READY_SCENARIOS.forEach(inputSeq => {
 
 START_SPINNING_READY_SCENARIOS.forEach(inputSeq => {
   QUnit.test(`With no task and timeout: ${formatInputSeq(inputSeq)}`, function exec_test(assert) {
-    const fsm = factory({ task: void 0, timeout });
+    const fsm = compiledFactory({ task: void 0, timeout });
     const data = Object.values(inputSeq[2])[0];
 
     const outputSeq = inputSeq.map(fsm);
@@ -92,7 +87,7 @@ START_SPINNING_READY_SCENARIOS.forEach(inputSeq => {
 
 START_SPINNING_READY_SCENARIOS.forEach(inputSeq => {
   QUnit.test(`With no task and no timeout: ${formatInputSeq(inputSeq)}`, function exec_test(assert) {
-    const fsm = factory({});
+    const fsm = compiledFactory({});
     const data = Object.values(inputSeq[2])[0];
 
     const outputSeq = inputSeq.map(fsm);
@@ -114,11 +109,11 @@ START_SPINNING_READY_SCENARIOS.forEach(inputSeq => {
   });
 })
 
-QUnit.module("Testing fsm with oracle - START_SPINNING_ERROR scenarios", {});
+QUnit.module("Testing compiled fsm with oracle - START_SPINNING_ERROR scenarios", {});
 
 START_SPINNING_ERROR_SCENARIOS.forEach(inputSeq => {
   QUnit.test(`With task and timeout: ${formatInputSeq(inputSeq)}`, function exec_test(assert) {
-    const fsm = factory({ task: dummyTask, timeout });
+    const fsm = compiledFactory({ task: dummyTask, timeout });
     const err = Object.values(inputSeq[2])[0];
 
     const outputSeq = inputSeq.map(fsm);
@@ -143,7 +138,7 @@ START_SPINNING_ERROR_SCENARIOS.forEach(inputSeq => {
 
 START_SPINNING_ERROR_SCENARIOS.forEach(inputSeq => {
   QUnit.test(`With task and no timeout: ${formatInputSeq(inputSeq)}`, function exec_test(assert) {
-    const fsm = factory({ task: dummyTask });
+    const fsm = compiledFactory({ task: dummyTask });
     const err = Object.values(inputSeq[2])[0];
 
     const outputSeq = inputSeq.map(fsm);
@@ -168,7 +163,7 @@ START_SPINNING_ERROR_SCENARIOS.forEach(inputSeq => {
 
 START_SPINNING_ERROR_SCENARIOS.forEach(inputSeq => {
   QUnit.test(`With no task and timeout: ${formatInputSeq(inputSeq)}`, function exec_test(assert) {
-    const fsm = factory({ task: void 0, timeout });
+    const fsm = compiledFactory({ task: void 0, timeout });
     const err = Object.values(inputSeq[2])[0];
 
     const outputSeq = inputSeq.map(fsm);
@@ -192,7 +187,7 @@ START_SPINNING_ERROR_SCENARIOS.forEach(inputSeq => {
 
 START_SPINNING_ERROR_SCENARIOS.forEach(inputSeq => {
   QUnit.test(`With no task and no timeout: ${formatInputSeq(inputSeq)}`, function exec_test(assert) {
-    const fsm = factory({});
+    const fsm = compiledFactory({});
     const err = Object.values(inputSeq[2])[0];
 
     const outputSeq = inputSeq.map(fsm);
@@ -214,11 +209,11 @@ START_SPINNING_ERROR_SCENARIOS.forEach(inputSeq => {
   });
 })
 
-QUnit.module("Testing fsm with oracle - START_READY scenarios", {});
+QUnit.module("Testing compiled fsm with oracle - START_READY scenarios", {});
 
 START_READY_SCENARIOS.forEach(inputSeq => {
   QUnit.test(`With task and timeout: ${formatInputSeq(inputSeq)}`, function exec_test(assert) {
-    const fsm = factory({ task: dummyTask, timeout });
+    const fsm = compiledFactory({ task: dummyTask, timeout });
     const data = Object.values(inputSeq[1])[0];
 
     const outputSeq = inputSeq.map(fsm);
@@ -240,7 +235,7 @@ START_READY_SCENARIOS.forEach(inputSeq => {
 
 START_READY_SCENARIOS.forEach(inputSeq => {
   QUnit.test(`With task and no timeout: ${formatInputSeq(inputSeq)}`, function exec_test(assert) {
-    const fsm = factory({ task: dummyTask });
+    const fsm = compiledFactory({ task: dummyTask });
     const data = Object.values(inputSeq[1])[0];
 
     const outputSeq = inputSeq.map(fsm);
@@ -262,7 +257,7 @@ START_READY_SCENARIOS.forEach(inputSeq => {
 
 START_READY_SCENARIOS.forEach(inputSeq => {
   QUnit.test(`With no task and timeout: ${formatInputSeq(inputSeq)}`, function exec_test(assert) {
-    const fsm = factory({ task: void 0, timeout });
+    const fsm = compiledFactory({ task: void 0, timeout });
     const data = Object.values(inputSeq[1])[0];
 
     const outputSeq = inputSeq.map(fsm);
@@ -283,7 +278,7 @@ START_READY_SCENARIOS.forEach(inputSeq => {
 
 START_READY_SCENARIOS.forEach(inputSeq => {
   QUnit.test(`With no task and no timeout: ${formatInputSeq(inputSeq)}`, function exec_test(assert) {
-    const fsm = factory({});
+    const fsm = compiledFactory({});
     const data = Object.values(inputSeq[1])[0];
 
     const outputSeq = inputSeq.map(fsm);
@@ -302,11 +297,11 @@ START_READY_SCENARIOS.forEach(inputSeq => {
   });
 })
 
-QUnit.module("Testing fsm with oracle - START_ERROR scenarios", {});
+QUnit.module("Testing compiled fsm with oracle - START_ERROR scenarios", {});
 
 START_ERROR_SCENARIOS.forEach(inputSeq => {
   QUnit.test(`With task and timeout: ${formatInputSeq(inputSeq)}`, function exec_test(assert) {
-    const fsm = factory({ task: dummyTask, timeout });
+    const fsm = compiledFactory({ task: dummyTask, timeout });
     const err = Object.values(inputSeq[1])[0];
 
     const outputSeq = inputSeq.map(fsm);
@@ -328,7 +323,7 @@ START_ERROR_SCENARIOS.forEach(inputSeq => {
 
 START_ERROR_SCENARIOS.forEach(inputSeq => {
   QUnit.test(`With task and no timeout: ${formatInputSeq(inputSeq)}`, function exec_test(assert) {
-    const fsm = factory({ task: dummyTask });
+    const fsm = compiledFactory({ task: dummyTask });
     const err = Object.values(inputSeq[1])[0];
 
     const outputSeq = inputSeq.map(fsm);
@@ -350,7 +345,7 @@ START_ERROR_SCENARIOS.forEach(inputSeq => {
 
 START_ERROR_SCENARIOS.forEach(inputSeq => {
   QUnit.test(`With no task and timeout: ${formatInputSeq(inputSeq)}`, function exec_test(assert) {
-    const fsm = factory({ task: void 0, timeout });
+    const fsm = compiledFactory({ task: void 0, timeout });
     const err = Object.values(inputSeq[1])[0];
 
     const outputSeq = inputSeq.map(fsm);
@@ -371,7 +366,7 @@ START_ERROR_SCENARIOS.forEach(inputSeq => {
 
 START_ERROR_SCENARIOS.forEach(inputSeq => {
   QUnit.test(`With no task and no timeout: ${formatInputSeq(inputSeq)}`, function exec_test(assert) {
-    const fsm = factory({});
+    const fsm = compiledFactory({});
     const err = Object.values(inputSeq[1])[0];
 
     const outputSeq = inputSeq.map(fsm);
