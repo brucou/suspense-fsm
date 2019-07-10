@@ -4,6 +4,7 @@ import {
 } from "../src/properties"
 
 export { compiledFactory } from "./compiled-fsm"
+export { commandMonikers, eventMonikers, properties } from "./properties"
 
 const [INIT, SUSPENSE, PENDING, SPINNING, ERROR, DONE] = stateMonikers;
 const [START, TIMER_EXPIRED, SUCCEEDED, FAILED] = eventMonikers;
@@ -17,7 +18,6 @@ function updateState(extendedState, extendedStateUpdates) {
   return extendedStateUpdates.reduce((acc, x) => Object.assign(acc, x), extendedStateCopy);
 }
 
-export const events = [TIMER_EXPIRED, SUCCEEDED, FAILED, START];
 const states = {
   [INIT]: "",
   [SUSPENSE]: {
@@ -41,7 +41,7 @@ export const fsmDef = {
   initialControlState,
   initialExtendedState,
   states,
-  events,
+  events: eventMonikers,
   transitions,
   updateState
 };
