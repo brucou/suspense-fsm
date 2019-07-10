@@ -1,4 +1,5 @@
 # Testing
+We will mix control and data flow in our test sequences.
 
 ## Main paths
 ### Control Flow
@@ -12,10 +13,13 @@
 - ready (no data | data)
 - error (no data | data)
 
-### Strategy
-We will mix control and data flow in our test sequences.
+## Auto-generated *interesting* sequences
+TODO: because of some generator runtime error(?)
 
-### Oracle
+## Auto-generated random sequences
+RegExp: `[START | TIMER_EXPIRED | SUCCEEDED | ERROR ]+`
+
+## Oracle
 1. Start -> Spinning -> Ready
    - No run:
      - emit timer | render fallback | render main
@@ -37,15 +41,10 @@ We will mix control and data flow in our test sequences.
    - run:
      - run task | emit timer | render main
 
-### Properties
+## Properties
 Abstracting null commands:
 - emit timer is always there
 - run task command is always before emit timer when present
 - render main is last when present
 - render error is last when present 
 - the render fallback command when present is always immediately after emit timer 
-
-## Edge cases
-Basically not starting with start, receiving unexpected events etc.
-- make some myself: take the oracle and intersperse event there, I know where the null will be from the oracle
-- make some random one
