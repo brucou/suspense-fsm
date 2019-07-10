@@ -29,3 +29,61 @@ export const eventMonikers = [START, TIMER_EXPIRED, SUCCEEDED, FAILED];
 const RUN = "RUN";
 const START_TIMER = "START_TIMER";
 export const commandMonikers = [COMMAND_RENDER, RUN, START_TIMER];
+
+// Actions
+export function runOperation(extendedState, eventData, settings) {
+  const { task } = settings;
+
+  return task
+    ? {
+      updates: [],
+      outputs: [{
+        command: RUN,
+        params: task
+      }],
+    }
+    : { updates: [], outputs: [] }
+}
+
+export function startTimer(extendedState, eventData, settings) {
+  const { timeout } = settings;
+
+  return {
+    updates: [],
+    outputs: [{
+      command: START_TIMER,
+      params: timeout || defaultTimeout
+    }],
+  }
+}
+
+export function renderFallback(extendedState, eventData, settings) {
+  return {
+    updates: [],
+    outputs: [{
+      command: COMMAND_RENDER,
+      params: { display: FALLBACK }
+    }],
+  }
+}
+
+export function renderSucceeded(extendedState, eventData, settings) {
+  return {
+    updates: [],
+    outputs: [{
+      command: COMMAND_RENDER,
+      params: { display: MAIN, data: eventData }
+    }],
+  }
+}
+
+export function renderError(extendedState, eventData, settings) {
+  return {
+    updates: [],
+    outputs: [{
+      command: COMMAND_RENDER,
+      params: { display: ERR, data: eventData }
+    }],
+  }
+}
+

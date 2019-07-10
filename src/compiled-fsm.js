@@ -1,67 +1,8 @@
 import { destructureEvent, INIT_EVENT, NO_OUTPUT } from "kingly"
-import { commandMonikers, eventMonikers, stateMonikers, properties } from "./properties"
+import {  eventMonikers, stateMonikers, runOperation, renderSucceeded, renderError, renderFallback, startTimer } from "./properties"
 
-const [FALLBACK, MAIN, ERR] = properties;
 const [INIT, SUSPENSE, PENDING, SPINNING, ERROR, DONE] = stateMonikers;
 const [START, TIMER_EXPIRED, SUCCEEDED, FAILED] = eventMonikers;
-const [COMMAND_RENDER, RUN, START_TIMER] = commandMonikers;
-
-// Actions
-function runOperation(extendedState, eventData, settings) {
-  const { task } = settings;
-
-  return task
-    ? {
-      updates: [],
-      outputs: [{
-        command: RUN,
-        params: task
-      }],
-    }
-    : { updates: [], outputs: [] }
-}
-
-function startTimer(extendedState, eventData, settings) {
-  const { timeout } = settings;
-
-  return {
-    updates: [],
-    outputs: [{
-      command: START_TIMER,
-      params: timeout || 200
-    }],
-  }
-}
-
-function renderSucceeded(extendedState, eventData, settings) {
-  return {
-    updates: [],
-    outputs: [{
-      command: COMMAND_RENDER,
-      params: { display: MAIN, data: eventData }
-    }],
-  }
-}
-
-function renderError(extendedState, eventData, settings) {
-  return {
-    updates: [],
-    outputs: [{
-      command: COMMAND_RENDER,
-      params: { display: ERR, data: eventData }
-    }],
-  }
-}
-
-function renderFallback(extendedState, eventData, settings) {
-  return {
-    updates: [],
-    outputs: [{
-      command: COMMAND_RENDER,
-      params: { display: FALLBACK }
-    }],
-  }
-}
 
 // State update
 // Basically {a, b: {c, d}}, [{b:{e}]} -> {a, b:{e}}

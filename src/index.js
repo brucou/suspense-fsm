@@ -1,10 +1,12 @@
-import { createStateMachine, INIT_EVENT, destructureEvent, NO_OUTPUT } from "kingly"
-import { commandMonikers, defaultTimeout, eventMonikers, properties, stateMonikers } from "../src/properties"
+import { createStateMachine, destructureEvent, INIT_EVENT, NO_OUTPUT } from "kingly"
+import {
+  eventMonikers, renderError, renderFallback, renderSucceeded, runOperation, startTimer, stateMonikers
+} from "../src/properties"
 
-const [FALLBACK, MAIN, ERR] = properties;
+export { compiledFactory } from "./compiled-fsm"
+
 const [INIT, SUSPENSE, PENDING, SPINNING, ERROR, DONE] = stateMonikers;
 const [START, TIMER_EXPIRED, SUCCEEDED, FAILED] = eventMonikers;
-const [COMMAND_RENDER, RUN, START_TIMER] = commandMonikers;
 
 // State update
 // Basically {a, b: {c, d}}, [{b:{e}]} -> {a, b:{e}}
@@ -34,63 +36,6 @@ const transitions = [
   { from: SUSPENSE, event: SUCCEEDED, to: DONE, action: renderSucceeded },
   { from: SUSPENSE, event: FAILED, to: ERROR, action: renderError },
 ];
-
-// Actions
-function runOperation(extendedState, eventData, settings) {
-  const { task } = settings;
-
-  return task
-    ? {
-      updates: [],
-      outputs: [{
-        command: RUN,
-        params: task
-      }],
-    }
-    : { updates: [], outputs: [] }
-}
-
-function startTimer(extendedState, eventData, settings) {
-  const { timeout } = settings;
-
-  return {
-    updates: [],
-    outputs: [{
-      command: START_TIMER,
-      params: timeout || defaultTimeout
-    }],
-  }
-}
-
-function renderFallback(extendedState, eventData, settings) {
-  return {
-    updates: [],
-    outputs: [{
-      command: COMMAND_RENDER,
-      params: { display: FALLBACK }
-    }],
-  }
-}
-
-function renderSucceeded(extendedState, eventData, settings) {
-  return {
-    updates: [],
-    outputs: [{
-      command: COMMAND_RENDER,
-      params: { display: MAIN, data: eventData }
-    }],
-  }
-}
-
-function renderError(extendedState, eventData, settings) {
-  return {
-    updates: [],
-    outputs: [{
-      command: COMMAND_RENDER,
-      params: { display: ERR, data: eventData }
-    }],
-  }
-}
 
 export const fsmDef = {
   initialControlState,
